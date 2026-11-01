@@ -1,154 +1,135 @@
 # MMZ Media Converter
 
-Cross-platform desktop application (Linux and Windows) for converting **videos, audio, images, and documents**, built with **Electron + Node.js** and a modern web interface (HTML5, CSS3, and JavaScript).
+A cross-platform desktop media converter built with **Electron**. Convert video, audio, images and documents in batches, with a modern UI, real progress reporting and a fully local/offline pipeline (FFmpeg is bundled, no uploads, no cloud).
 
-> Convert files individually or in batches, choose the destination folder, file names, and quality — all in Portuguese, Spanish, or English, with light or dark themes.
-
----
-
-## Table of Contents
-
-- [Features](https://chatgpt.com/c/6ae6c227-002c-83e8-b1db-4c61dc044b27?temporary-chat=true#features)
-
-- [Supported Formats](https://chatgpt.com/c/6ae6c227-002c-83e8-b1db-4c61dc044b27?temporary-chat=true#supported-formats)
-
-- [System Requirements](https://chatgpt.com/c/6ae6c227-002c-83e8-b1db-4c61dc044b27?temporary-chat=true#system-requirements)
-
-- [Installation and Setup](https://chatgpt.com/c/6ae6c227-002c-83e8-b1db-4c61dc044b27?temporary-chat=true#installation-and-setup)
-
-- [Project Structure](https://chatgpt.com/c/6ae6c227-002c-83e8-b1db-4c61dc044b27?temporary-chat=true#project-structure)
-
-- [Building the Application](https://chatgpt.com/c/6ae6c227-002c-83e8-b1db-4c61dc044b27?temporary-chat=true#building-the-application)
-
-- [Contributing](https://chatgpt.com/c/6ae6c227-002c-83e8-b1db-4c61dc044b27?temporary-chat=true#contributing)
-
-- [License](https://chatgpt.com/c/6ae6c227-002c-83e8-b1db-4c61dc044b27?temporary-chat=true#license)
+> Windows · Linux · UI in **English**, **Portuguese (pt-BR)** and **Spanish (es)**
 
 ---
 
 ## Features
 
-- **Individual and batch conversion** with a managed queue (configurable simultaneous conversion limit).
+- **All-in-one conversion** — video, audio, images and documents in a single queue.
+- **Drag & drop** files or pick them with a native dialog (multi-select supported).
+- **Batch conversion queue** with:
+  - configurable parallelism (1–6 simultaneous conversions);
+  - pause / resume (real process suspension on Linux/macOS);
+  - cancel, retry and remove individual jobs, or cancel/clear everything;
+  - per-job and overall progress bars with real speed/FPS from FFmpeg.
+- **Quality presets** — `low`, `medium`, `high`, `ultra` mapped to CRF, video `qscale` and audio bitrates per codec.
+- **Smart output naming** — keep the original name or add a custom suffix, with automatic collision-free naming (`file (1).mp4`, `file (2).mp4`, …).
+- **Flexible destination** — a single output folder or "next to the source file".
+- **Local FFmpeg detection** — uses the bundled `ffmpeg/bin/` copy first and falls back to the system `PATH`; the header shows the FFmpeg status chip.
+- **Modern UI** — dark/light theme, persisted window size/position, toasts, status bar, keyboard-accessible controls.
+- **Offline & private** — everything runs on your machine; files are never uploaded.
+- **Secure by default** — `contextIsolation` enabled, no Node access in the renderer, all IPC validated through a whitelist.
 
-- **Drag-and-drop area** for files, plus file selection through the system dialog.
+## Supported formats
 
-- **Pause, resume, and cancel** the entire queue or individual files.
+| Category | Output formats | Accepted inputs (examples) |
+| --- | --- | --- |
+| **Video** | MP4 (H.264 + AAC), AVI, MKV, MOV, WMV, FLV, WebM (VP9 + Opus) | mp4, avi, mkv, mov, wmv, flv, webm, m4v, mpg, mpeg, 3gp, ts, mts, m2ts, vob, ogv, divx |
+| **Audio** | MP3, WAV, FLAC, AAC, OGG, WMA | mp3, wav, flac, aac, ogg, wma, m4a, opus, aif, aiff, amr, ape |
+| **Image** | JPG, PNG, GIF, BMP, SVG, WebP, TIFF | jpg, jpeg, png, gif, bmp, svg, webp, tiff, tif, avif |
+| **Document** | PDF, DOCX, TXT | pdf, docx, txt |
 
-- **Individual progress bar** for each file, displaying its status (queued, converting, completed, error, or canceled).
+Conversion engines:
 
-- **Editable output format** for each file before starting the conversion.
+- **FFmpeg / ffprobe** — video and audio, with real progress via `-progress pipe:1`; also the fallback path for images (e.g. BMP, which `sharp` does not support).
+- **sharp** — fast native image conversion with EXIF auto-rotation, animated GIF/WebP preservation and SVG output (raster embedded as base64).
+- **mammoth / pdf-parse** + custom writers — document conversions between `TXT ↔ PDF ↔ DOCX`.
 
-- **Configurable destination folder** and overwrite protection (automatically generates `filename (1).ext`, `filename (2).ext`, etc.).
+## Tech stack
 
-- **File naming modes:** keep original name, add a suffix, or add a prefix.
+| Layer | Choice |
+| --- | --- |
+| Desktop shell | Electron 45 (main + sandboxed renderer) |
+| Video/audio | FFmpeg & ffprobe (bundled binaries) |
+| Images | sharp |
+| Documents | mammoth, pdf-parse, custom PDF/DOCX writers |
+| Packaging | electron-builder (NSIS + portable on Windows, AppImage + deb on Linux) |
 
-- **Quality settings:** High, Balanced, or Smaller File Size (automatically adjusts CRF/bitrate).
+## Getting started
 
-- **Optional metadata preservation** for audio and video files.
+### Prerequisites
 
-- **Internationalization (i18n):** Portuguese (Brazil) — default, English, and Spanish, with separate JSON files.
+- Node.js 18+ and npm
+- FFmpeg is **not** required to be installed — the repository ships with binaries in `ffmpeg/bin/`. If you delete that folder, the app falls back to an `ffmpeg`/`ffprobe` available on your system `PATH`.
 
-- **Light and dark themes** with smooth transitions.
+### Install and run
 
-- **FFmpeg auto-detection** (local copy in `ffmpeg/bin`, system PATH, or custom path).
-
-- Individual error handling: a failure in one file does not interrupt the remaining queue.
-
-## Supported Formats
-
-| Category  | From / To                                                                                                                |
-| --------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Video     | MP4, AVI, MKV, MOV, WMV, FLV, WebM                                                                                       |
-| Audio     | MP3, WAV, FLAC, AAC, OGG, WMA                                                                                            |
-| Images    | JPG, PNG, GIF, BMP, SVG, WEBP, TIFF (SVG is rasterized; animated GIFs are preserved when supported by the target format) |
-| Documents | DOCX → TXT, PDF → TXT, TXT → PDF                                                                                         |
-
-> **Important:** **Video and audio** conversions (as well as BMP output) require **FFmpeg**. Image and document conversions work without it.
-
----
-
-## System Requirements
-
-- **Node.js** 18+ and **npm** (or yarn/pnpm).
-
-- **FFmpeg** accessible through one of the following methods:
-  
-  1. Binary included in the project at `ffmpeg/bin/ffmpeg(.exe)` (detected automatically).
-  
-  2. Installed in the system PATH (`sudo apt install ffmpeg` on Linux, `winget install ffmpeg` on Windows).
-  
-  3. Manually specified under **Settings → Advanced → FFmpeg Path**.
-
-Tested systems: **Ubuntu/Fedora** (Linux) and **Windows 10/11**.
-
----
-
-## Installation and Setup
-
-```
-# 1. Clone the repositorygit clone https://github.com/mmz/mmz-converter.gitcd mmz-converter# 2. Install dependenciesnpm install# 3. Run in development modenpm start
+```bash
+git clone https://github.com/misbka/MMZ-Media-Converter.git
+cd MMZ-Media-Converter
+npm install
+npm start          # normal launch
+npm run dev        # launch with devtools
 ```
 
-### Tips
+## Testing
 
-- Converted files are saved to `~/MMZ_Convertidos` by default. Change this under **Settings → Output**.
-
-- Local FFmpeg is detected automatically. The notification at the top disappears once FFmpeg is available.
-
-- Settings (theme, language, folder, etc.) are automatically saved to the user's profile.
-
----
-
-## Project Structure
-
-```
-mmz-converter/├── package.json              # Metadata, scripts, and electron-builder configuration├── .gitignore├── ffmpeg/bin/               # (optional) Local FFmpeg binary used by the application├── src/                      # Main process (Node.js backend)│   ├── main.js               # Window management, IPC, and FFmpeg auto-detection│   ├── preload.js            # Secure contextBridge and locale loading│   ├── settings.js            # Settings persistence (JSON)│   ├── jobManager.js         # Conversion queue (concurrency, pause, cancellation)│   └── converters/│       ├── media.js          # Video/audio conversions via fluent-ffmpeg│       ├── image.js          # Image conversions via sharp (FFmpeg fallback for BMP)│       └── document.js       # Document conversions (mammoth, pdf-parse, pdf-lib)└── renderer/                 # User interface (frontend)    ├── index.html    ├── css/styles.css        # Light/dark themes using CSS variables    ├── js/    │   ├── i18n.js           # Multilingual text management    │   ├── store.js          # Centralized state management (pub/sub)    │   └── app.js            # UI logic, drag and drop, and queue controls    └── locales/        ├── pt-BR.json        # Portuguese (Brazil) — default        ├── en.json           # English        └── es.json           # Spanish
+```bash
+npm run smoke      # headless smoke test of every converter + the queue (no Electron window)
+npm run test:app   # launches the app in --smoke-test mode (CI-friendly)
 ```
 
-### How It Works Internally
+The smoke test verifies FFmpeg detection, video/audio/image/document conversion across all target formats, output naming and queue events.
 
-1. The renderer sends the file paths (drag and drop uses `webUtils.getPathForFile`).
+## Building installers
 
-2. The `JobManager` creates one **job** per file, calculates the output path, and adds it to the queue.
-
-3. Each job is handled by the appropriate converter (`media`, `image`, or `document`), respecting the concurrency limit.
-
-4. Progress and status updates are sent back to the renderer through IPC (`job:update`) and displayed in the interface in real time.
-
----
-
-## Building the Application
-
-```
-# Package without an installer (quick test)npm run pack# Windows (NSIS installer)npm run dist:win# Linux (AppImage and .deb)npm run dist:linux# Both platforms (requires a compatible environment)npm run dist
+```bash
+npm run pack        # unpacked build into dist/ (fast, for local checks)
+npm run dist:win    # Windows → NSIS installer + portable .exe
+npm run dist:linux  # Linux → AppImage + .deb
 ```
 
-Generated files are placed in the `dist/` folder. On Linux, build the application on a Linux machine (or use Wine/CI) to generate valid AppImage/.deb packages.
+Bundled FFmpeg binaries are copied into the installer automatically (`extraResources`), so end users need no separate FFmpeg installation.
 
----
+## Project structure
 
-## Contributing
+```
+.
+├── main.js                  # Electron main-process entry (window, settings, queue, IPC)
+├── preload.js               # contextBridge → exposes the window.mmz API to the renderer
+├── shared/
+│   └── formats.js           # single source of truth: formats, quality maps, FFmpeg args
+├── src/
+│   ├── main/                # main-process modules
+│   │   ├── settingsStore.js # persisted JSON preferences (userData/settings.json)
+│   │   ├── binaryLocator.js # finds bundled/system FFmpeg + ffprobe
+│   │   ├── i18n.js          # translation dictionaries loader
+│   │   ├── ipc.js           # all IPC channels (settings, dialogs, queue, shell)
+│   │   └── conversion/
+│   │       ├── queue.js             # job queue: parallelism, pause/resume, events
+│   │       ├── ffmpegConverter.js   # video/audio with progress + cancellation
+│   │       ├── imageConverter.js    # sharp-based image conversion + fallbacks
+│   │       ├── documentConverter.js # TXT ↔ PDF ↔ DOCX
+│   │       └── outputNamer.js       # collision-free output path resolution
+│   ├── i18n/                # en.json, pt-BR.json, es.json
+│   ├── renderer/            # UI (HTML/CSS/vanilla JS modules)
+│   └── utils/               # pdfWriter.js, zipWriter.js
+├── scripts/
+│   └── smoke-test.js        # headless end-to-end smoke test
+└── ffmpeg/bin/              # bundled ffmpeg, ffprobe, ffplay (offline use)
+```
 
-1. Fork the repository.
+## How it works
 
-2. Create a feature branch: `git checkout -b feature/my-improvement`.
+1. Files are dropped into the queue; each one is categorized by extension using the shared format registry.
+2. The user picks an output format and quality per category (persisted in `settings.json`).
+3. On **Start**, the `ConversionQueue` runs up to *N* jobs in parallel. FFmpeg work happens in child processes, so the UI never blocks; sharp work is off the main thread by nature.
+4. Progress events (throttled to ~250 ms) flow `queue → IPC → renderer` and update per-job and overall progress.
+5. Outputs get unique names, and you can open the destination folder or reveal a file directly from the UI.
 
-3. Commit your changes: `git commit -m "feat: add my improvement"`.
+## Roadmap ideas
 
-4. Push your branch: `git push origin feature/my-improvement`.
+- [ ] Custom FFmpeg path setting + in-app codec/bitrate controls
+- [ ] Video trimming, resizing and audio extraction (video → audio)
+- [ ] Image resizing and batch watermarking
+- [ ] Persistent conversion history and drag-and-drop of whole folders
+- [ ] macOS build targets (dmg)
 
-5. Open a **Pull Request** describing the issue you fixed or the feature you added.
-
-**Guidelines:**
-
-- Follow the existing coding style (JavaScript CommonJS in the backend, classic ES modules in the renderer).
-
-- Add translation keys to all three locale files (`pt-BR`, `en`, `es`).
-
-- Prefer asynchronous conversions and always report progress and errors to the user.
-
----
+Contributions and issue reports are welcome.
 
 ## License
 
-Distributed under the **MIT License**. See [LICENSE](https://chatgpt.com/c/LICENSE) for more details.
+[MIT](LICENSE) © MMZ
