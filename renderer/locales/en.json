@@ -1,0 +1,76 @@
+{
+  "app": {
+    "title": "MMZ Media Converter",
+    "tagline": "Convert videos, audios, images and documents in a few clicks"
+  },
+  "sidebar": {
+    "settings": "Settings",
+    "appearance": "Appearance",
+    "language": "Language",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "output": "Output",
+    "outputDir": "Destination folder",
+    "browse": "Browse...",
+    "fileNameMode": "File naming",
+    "keepName": "Keep original name",
+    "suffix": "Add suffix",
+    "prefix": "Add prefix",
+    "suffixLabel": "Suffix",
+    "prefixLabel": "Prefix",
+    "quality": "Quality",
+    "qualityHigh": "High",
+    "qualityBalanced": "Balanced",
+    "qualitySmall": "Smaller size",
+    "advanced": "Advanced",
+    "maxConcurrent": "Parallel conversions",
+    "keepMetadata": "Keep metadata",
+    "overwrite": "Overwrite existing files",
+    "ffmpegPath": "FFmpeg path",
+    "ffmpegAuto": "Automatic (system PATH)",
+    "ffmpegMissing": "FFmpeg not found. Install it or set the executable path to convert videos and audios."
+  },
+  "dropzone": {
+    "title": "Drag and drop files here",
+    "subtitle": "or",
+    "browse": "Select files",
+    "supported": "MP4, AVI, MKV, MOV, WMV, FLV, WebM • MP3, WAV, FLAC, AAC, OGG, WMA • JPG, PNG, GIF, BMP, SVG, WEBP, TIFF • PDF, DOCX, TXT"
+  },
+  "list": {
+    "file": "File",
+    "format": "Format",
+    "status": "Status",
+    "progress": "Progress",
+    "actions": "Actions",
+    "empty": "No files in the list. Add files to get started.",
+    "total": "{count} file(s) in the queue"
+  },
+  "status": {
+    "queued": "Queued",
+    "processing": "Converting",
+    "completed": "Done",
+    "error": "Error",
+    "canceled": "Canceled"
+  },
+  "actions": {
+    "convert": "Convert",
+    "pause": "Pause",
+    "resume": "Resume",
+    "cancel": "Cancel",
+    "cancelAll": "Cancel all",
+    "clear": "Clear finished",
+    "addFiles": "Add files",
+    "openFolder": "Open folder",
+    "showFile": "Show file"
+  },
+  "toast": {
+    "added": "{count} file(s) added to the queue",
+    "unsupported": "{count} file(s) skipped: unsupported format",
+    "queueDone": "Conversion queue finished",
+    "dirCreated": "Destination folder created"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again."
+  }
+}

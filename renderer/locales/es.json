@@ -1,0 +1,76 @@
+{
+  "app": {
+    "title": "MMZ Media Converter",
+    "tagline": "Convierte videos, audios, imágenes y documentos en pocos clics"
+  },
+  "sidebar": {
+    "settings": "Configuración",
+    "appearance": "Apariencia",
+    "language": "Idioma",
+    "theme": "Tema",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "output": "Salida",
+    "outputDir": "Carpeta de destino",
+    "browse": "Examinar...",
+    "fileNameMode": "Nombre de los archivos",
+    "keepName": "Mantener nombre original",
+    "suffix": "Agregar sufijo",
+    "prefix": "Agregar prefijo",
+    "suffixLabel": "Sufijo",
+    "prefixLabel": "Prefijo",
+    "quality": "Calidad",
+    "qualityHigh": "Alta",
+    "qualityBalanced": "Equilibrada",
+    "qualitySmall": "Menor tamaño",
+    "advanced": "Avanzado",
+    "maxConcurrent": "Conversiones simultáneas",
+    "keepMetadata": "Conservar metadatos",
+    "overwrite": "Sobrescribir archivos existentes",
+    "ffmpegPath": "Ruta de FFmpeg",
+    "ffmpegAuto": "Automática (PATH del sistema)",
+    "ffmpegMissing": "FFmpeg no encontrado. Instálalo o indica la ruta del ejecutable para convertir videos y audios."
+  },
+  "dropzone": {
+    "title": "Arrastra y suelta archivos aquí",
+    "subtitle": "o",
+    "browse": "Seleccionar archivos",
+    "supported": "MP4, AVI, MKV, MOV, WMV, FLV, WebM • MP3, WAV, FLAC, AAC, OGG, WMA • JPG, PNG, GIF, BMP, SVG, WEBP, TIFF • PDF, DOCX, TXT"
+  },
+  "list": {
+    "file": "Archivo",
+    "format": "Formato",
+    "status": "Estado",
+    "progress": "Progreso",
+    "actions": "Acciones",
+    "empty": "No hay archivos en la lista. Agrega archivos para comenzar.",
+    "total": "{count} archivo(s) en la cola"
+  },
+  "status": {
+    "queued": "En cola",
+    "processing": "Convirtiendo",
+    "completed": "Completado",
+    "error": "Error",
+    "canceled": "Cancelado"
+  },
+  "actions": {
+    "convert": "Convertir",
+    "pause": "Pausar",
+    "resume": "Reanudar",
+    "cancel": "Cancelar",
+    "cancelAll": "Cancelar todo",
+    "clear": "Limpiar completados",
+    "addFiles": "Agregar archivos",
+    "openFolder": "Abrir carpeta",
+    "showFile": "Mostrar archivo"
+  },
+  "toast": {
+    "added": "{count} archivo(s) agregado(s) a la cola",
+    "unsupported": "{count} archivo(s) omitido(s): formato no compatible",
+    "queueDone": "Cola de conversión finalizada",
+    "dirCreated": "Carpeta de destino creada"
+  },
+  "errors": {
+    "generic": "Algo salió mal. Inténtalo de nuevo."
+  }
+}

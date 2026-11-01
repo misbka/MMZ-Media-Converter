@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MMZ Media Converter</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app">
+
+    <!-- ============================ BARRA LATERAL ============================ -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">M</div>
+        <div class="brand-text">
+          <h1 data-i18n="app.title">MMZ Media Converter</h1>
+          <p data-i18n="app.tagline"></p>
+        </div>
+      </div>
+
+      <div class="sidebar-scroll">
+        <!-- Aparência -->
+        <section class="panel">
+          <h2 class="panel-title" data-i18n="sidebar.appearance"></h2>
+
+          <label class="field">
+            <span data-i18n="sidebar.language"></span>
+            <select id="setting-language">
+              <option value="pt-BR">Português (Brasil)</option>
+              <option value="es">Español</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+
+          <div class="field">
+            <span data-i18n="sidebar.theme"></span>
+            <div class="segmented" id="setting-theme">
+              <button type="button" data-value="light" data-i18n="sidebar.themeLight"></button>
+              <button type="button" data-value="dark" data-i18n="sidebar.themeDark"></button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Saída -->
+        <section class="panel">
+          <h2 class="panel-title" data-i18n="sidebar.output"></h2>
+
+          <label class="field">
+            <span data-i18n="sidebar.outputDir"></span>
+            <div class="input-group">
+              <input type="text" id="setting-outputDir" readonly />
+              <button type="button" class="btn btn-ghost" id="btn-pick-folder" data-i18n="sidebar.browse"></button>
+            </div>
+          </label>
+
+          <label class="field">
+            <span data-i18n="sidebar.fileNameMode"></span>
+            <select id="setting-fileNameMode">
+              <option value="keep" data-i18n="sidebar.keepName"></option>
+              <option value="suffix" data-i18n="sidebar.suffix"></option>
+              <option value="prefix" data-i18n="sidebar.prefix"></option>
+            </select>
+          </label>
+
+          <label class="field" id="field-suffix">
+            <span data-i18n="sidebar.suffixLabel"></span>
+            <input type="text" id="setting-fileNameSuffix" placeholder="_convertido" />
+          </label>
+
+          <label class="field" id="field-prefix" hidden>
+            <span data-i18n="sidebar.prefixLabel"></span>
+            <input type="text" id="setting-fileNamePrefix" placeholder="novo_" />
+          </label>
+
+          <label class="field">
+            <span data-i18n="sidebar.quality"></span>
+            <select id="setting-quality">
+              <option value="high" data-i18n="sidebar.qualityHigh"></option>
+              <option value="balanced" data-i18n="sidebar.qualityBalanced"></option>
+              <option value="small" data-i18n="sidebar.qualitySmall"></option>
+            </select>
+          </label>
+        </section>
+
+        <!-- Avançado -->
+        <section class="panel">
+          <h2 class="panel-title" data-i18n="sidebar.advanced"></h2>
+
+          <label class="field">
+            <span data-i18n="sidebar.maxConcurrent"></span>
+            <input type="number" id="setting-maxConcurrent" min="1" max="6" step="1" />
+          </label>
+
+          <label class="toggle">
+            <input type="checkbox" id="setting-keepMetadata" />
+            <span class="toggle-track"></span>
+            <span data-i18n="sidebar.keepMetadata"></span>
+          </label>
+
+          <label class="toggle">
+            <input type="checkbox" id="setting-overwriteExisting" />
+            <span class="toggle-track"></span>
+            <span data-i18n="sidebar.overwrite"></span>
+          </label>
+
+          <label class="field">
+            <span data-i18n="sidebar.ffmpegPath"></span>
+            <div class="input-group">
+              <input type="text" id="setting-ffmpegPath" data-i18n-placeholder="sidebar.ffmpegAuto" />
+            </div>
+            <small class="hint" id="ffmpeg-status"></small>
+          </label>
+        </section>
+      </div>
+    </aside>
+
+    <!-- ============================ CONTEÚDO PRINCIPAL ======================= -->
+    <main class="content">
+      <div class="banner banner-warning" id="ffmpeg-banner" hidden>
+        <span class="banner-icon">⚠</span>
+        <span data-i18n="sidebar.ffmpegMissing"></span>
+      </div>
+
+      <!-- Zona de arrastar e soltar -->
+      <div class="dropzone" id="dropzone" tabindex="0">
+        <div class="dropzone-icon">
+          <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 16V4m0 0l-4 4m4-4l4 4" />
+            <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+          </svg>
+        </div>
+        <p class="dropzone-title" data-i18n="dropzone.title"></p>
+        <p class="dropzone-sub"><span data-i18n="dropzone.subtitle"></span>
+          <button type="button" class="btn btn-primary" id="btn-pick-files" data-i18n="dropzone.browse"></button>
+        </p>
+        <p class="dropzone-formats" data-i18n="dropzone.supported"></p>
+      </div>
+
+      <!-- Lista de arquivos -->
+      <section class="file-panel">
+        <div class="file-panel-head">
+          <h2 data-i18n="list.file"></h2>
+          <span class="count" id="file-count"></span>
+        </div>
+
+        <div class="table-wrap">
+          <table class="file-table">
+            <thead>
+              <tr>
+                <th data-i18n="list.file"></th>
+                <th class="col-format" data-i18n="list.format"></th>
+                <th class="col-status" data-i18n="list.status"></th>
+                <th class="col-progress" data-i18n="list.progress"></th>
+                <th class="col-actions" data-i18n="list.actions"></th>
+              </tr>
+            </thead>
+            <tbody id="file-tbody">
+              <tr class="empty-row">
+                <td colspan="5" data-i18n="list.empty"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Barra de ações -->
+      <footer class="toolbar">
+        <div class="toolbar-left">
+          <button type="button" class="btn btn-ghost" id="btn-add-files" data-i18n="actions.addFiles"></button>
+          <button type="button" class="btn btn-ghost" id="btn-clear" data-i18n="actions.clear"></button>
+        </div>
+        <div class="toolbar-right">
+          <button type="button" class="btn btn-danger" id="btn-cancel-all" disabled data-i18n="actions.cancelAll"></button>
+          <button type="button" class="btn btn-secondary" id="btn-pause" disabled data-i18n="actions.pause"></button>
+          <button type="button" class="btn btn-primary" id="btn-convert" data-i18n="actions.convert"></button>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Toast de notificações -->
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

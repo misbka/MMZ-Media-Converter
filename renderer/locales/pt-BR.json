@@ -1,0 +1,76 @@
+{
+  "app": {
+    "title": "MMZ Media Converter",
+    "tagline": "Converta vídeos, áudios, imagens e documentos em poucos cliques"
+  },
+  "sidebar": {
+    "settings": "Configurações",
+    "appearance": "Aparência",
+    "language": "Idioma",
+    "theme": "Tema",
+    "themeLight": "Claro",
+    "themeDark": "Escuro",
+    "output": "Saída",
+    "outputDir": "Pasta de destino",
+    "browse": "Procurar...",
+    "fileNameMode": "Nome dos arquivos",
+    "keepName": "Manter nome original",
+    "suffix": "Adicionar sufixo",
+    "prefix": "Adicionar prefixo",
+    "suffixLabel": "Sufixo",
+    "prefixLabel": "Prefixo",
+    "quality": "Qualidade",
+    "qualityHigh": "Alta",
+    "qualityBalanced": "Equilibrada",
+    "qualitySmall": "Menor tamanho",
+    "advanced": "Avançado",
+    "maxConcurrent": "Conversões simultâneas",
+    "keepMetadata": "Manter metadados",
+    "overwrite": "Sobrescrever arquivos existentes",
+    "ffmpegPath": "Caminho do FFmpeg",
+    "ffmpegAuto": "Automático (PATH do sistema)",
+    "ffmpegMissing": "FFmpeg não encontrado. Instale-o ou informe o caminho do executável para converter vídeos e áudios."
+  },
+  "dropzone": {
+    "title": "Arraste e solte arquivos aqui",
+    "subtitle": "ou",
+    "browse": "Selecionar arquivos",
+    "supported": "MP4, AVI, MKV, MOV, WMV, FLV, WebM • MP3, WAV, FLAC, AAC, OGG, WMA • JPG, PNG, GIF, BMP, SVG, WEBP, TIFF • PDF, DOCX, TXT"
+  },
+  "list": {
+    "file": "Arquivo",
+    "format": "Formato",
+    "status": "Status",
+    "progress": "Progresso",
+    "actions": "Ações",
+    "empty": "Nenhum arquivo na lista. Adicione arquivos para começar.",
+    "total": "{count} arquivo(s) na fila"
+  },
+  "status": {
+    "queued": "Na fila",
+    "processing": "Convertendo",
+    "completed": "Concluído",
+    "error": "Erro",
+    "canceled": "Cancelado"
+  },
+  "actions": {
+    "convert": "Converter",
+    "pause": "Pausar",
+    "resume": "Retomar",
+    "cancel": "Cancelar",
+    "cancelAll": "Cancelar tudo",
+    "clear": "Limpar concluídos",
+    "addFiles": "Adicionar",
+    "openFolder": "Abrir pasta",
+    "showFile": "Mostrar arquivo"
+  },
+  "toast": {
+    "added": "{count} arquivo(s) adicionado(s) à fila",
+    "unsupported": "{count} arquivo(s) ignorado(s): formato não suportado",
+    "queueDone": "Fila de conversão finalizada",
+    "dirCreated": "Pasta de destino criada"
+  },
+  "errors": {
+    "generic": "Algo deu errado. Tente novamente."
+  }
+}

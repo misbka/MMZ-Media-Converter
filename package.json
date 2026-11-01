@@ -1,0 +1,92 @@
+{
+  "name": "mmz-media-converter",
+  "productName": "MMZ Media Converter",
+  "version": "1.0.0",
+  "description": "MMZ Media Converter - conversor de mídia multiplataforma (vídeo, áudio, imagem e documentos) com FFmpeg local, sharp e interface moderna. / Cross-platform media converter (video, audio, image and documents) with local FFmpeg, sharp and a modern UI.",
+  "main": "main.js",
+  "author": "MMZ",
+  "license": "MIT",
+  "homepage": "https://github.com/mmz/mmz-media-converter",
+  "keywords": [
+    "electron",
+    "ffmpeg",
+    "converter",
+    "video",
+    "audio",
+    "image",
+    "media",
+    "sharp"
+  ],
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "smoke": "node scripts/smoke-test.js",
+    "test:app": "electron . --smoke-test",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:linux": "electron-builder --linux"
+  },
+  "dependencies": {
+    "@img/sharp-win32-x64": "^0.33.5",
+    "mammoth": "^1.13.0",
+    "pdf-parse": "^2.4.5",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "electron": "^45.2.1",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "com.mmz.mediaconverter",
+    "productName": "MMZ Media Converter",
+    "copyright": "Copyright © 2026 MMZ",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "shared/**/*",
+      "src/main/**/*",
+      "src/utils/**/*",
+      "src/i18n/**/*",
+      "src/renderer/**/*",
+      "!src/renderer/**/*.map",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "ffmpeg/bin",
+        "to": "ffmpeg/bin",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "AudioVideo",
+      "maintainer": "MMZ"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  },
+  "allowScripts": {
+    "electron": true,
+    "sharp@0.33.5": true
+  }
+}
